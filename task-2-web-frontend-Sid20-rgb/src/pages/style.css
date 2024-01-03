@@ -1,0 +1,82 @@
+.profile {
+  transition: transform 0.3s ease;
+}
+
+.hide {
+  transform: translateX(100%);
+}
+
+.show {
+  transform: translateX(0);
+}
+
+.profile .bg-blue-500 {
+  background-image: url('https://images.unsplash.com/photo-1517245386807-9b4d0dd9e033?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8YmFja2dyb3VuZCUyMGJsb2d8ZW58MHx8MHx8&ixlib=rb-1.2.1&w=1000&q=80');
+  background-size: cover;
+  background-position: center;
+}
+
+.user-profile::-webkit-scrollbar {
+  display: none;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 0.5em;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: transparent;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #1F2937;
+  color: white;
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  color: black;
+}
+
+.preview-image {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  margin-left: 10px;
+}
+
+.textarea-wrapper {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%;
+}
+
+.textarea-group {
+  display: flex;
+  /* Added display flex */
+  width: 50%;
+  /* Added width 100% */
+}
+
+textarea {
+  flex: 1;
+  /* Added flex 1 */
+  padding: 5px;
+  resize: vertical;
+  border: none;
+  box-sizing: border-box;
+  width: 100%;
+  border-radius: 10px;
+  color: black;
+}

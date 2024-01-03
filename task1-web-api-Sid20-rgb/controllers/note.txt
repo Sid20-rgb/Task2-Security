@@ -1,0 +1,19 @@
+{
+  "title": "Love and Lo",
+  "content": "This is the content of my blog.",
+  "contentImg": ["image1.jpg", "image2.jpg"],
+  "blogCover": "cover.jpg"
+  
+}
+
+
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ODg1Njk0ZjI3ZTIwMDgzYzczNzdjNyIsInVzZXJuYW1lIjoiRmluYWwgQWRtaW4iLCJlbWFpbCI6ImFkbWluYWRtaW4iLCJpYXQiOjE2ODY2NTY2NjgsImV4cCI6MTY4Njc0MzA2OH0.DJ8C8Z8L_aAtpPK-J1hrktFzUMxaMj7Mijx0HN2h2vc
+
+Get-Process | Where-Object {$_.ProcessName -eq "node"} | Stop-Process
+
+{
+  "title": "All I wanted was vacation in London",
+  "content": "djdjjdjd",
+  "contentImg": [],
+  "blogCover": "london.jpg"
+}

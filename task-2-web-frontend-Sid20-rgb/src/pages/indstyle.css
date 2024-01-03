@@ -1,0 +1,119 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;          
+}
+
+.cover-image {
+  position: relative;
+  width: 100%;
+
+  /* Adjust the height as per your requirements */
+  overflow: hidden;
+  z-index: 1;
+}
+
+.cover-image:before {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  border-radius: 50% 0 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom right, transparent, #000);
+  transform: translateY(50%);
+}
+
+.content {
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 1;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.profile-picture {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #ddd;
+  /* Placeholder background color for profile picture */
+}
+
+.user-details {
+  margin-left: 10px;
+}
+
+.user-details h2 {
+  margin: 0;
+}
+
+.user-details p {
+  margin: 0;
+  color: #888;
+  /* Placeholder color for date */
+}
+
+.user-details h1 {
+  margin: 10px 0;
+}
+
+.random-texts {
+  margin-top: 20px;
+}
+
+.random-texts p {
+  margin-bottom: 10px;
+}
+
+.random-texts img {
+  width: 100%;
+  max-width: 400px;
+  /* Adjust the max-width as per your requirements */
+  height: auto;
+  margin-bottom: 20px;
+}
+
+.image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
+  padding: 20px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.content {
+  position: relative;
+  z-index: 0;
+
+}
+
+.scrollable-content {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow-y: auto;
+  padding-top: 230px; /* Adjust this value to match the height of the cover image */
+}
+
+@media (max-width: 768px) {
+  .cover-image {
+    height: 300px;
+  }
+}

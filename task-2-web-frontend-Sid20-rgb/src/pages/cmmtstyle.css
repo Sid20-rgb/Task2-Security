@@ -1,0 +1,98 @@
+.comment {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.user-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.username {
+    font-size: 15px;
+    margin-bottom: 5px;
+    color: #fff;
+}
+
+.date {
+    font-size: 12px;
+    color: #888;
+}
+
+.comment-text {
+    font-size: 14px;
+    color: #fff;
+}
+
+body {
+    background-color: #1F2937;
+    margin: 0;
+    padding: 0;
+}
+
+.app {
+    /* margin: 20px; */
+    padding: 20px;
+    /* background-color: #fff; */
+    border-radius: 5px;
+    position: relative;
+}
+
+.comment-section-title {
+    font-size: 23px;
+    color: white;
+    font-weight: 600;
+}
+
+.comment-form {
+    /* margin-bottom: 10px; */
+    /* position: fixed; */
+    /* background-color: red; */
+    width: 100%;
+}
+.comment-section {
+    /* position: fixed; */
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #1f2937;
+    color: white;
+    padding: 20px;
+    z-index: 999;
+}
+
+.divider {
+    border-bottom: 1px solid #ccc;
+    margin: 20px 0;
+}
+
+.content {
+    margin-top: 100px;
+    /* Adjust the margin as needed to prevent content overlap */
+    padding: 20px;
+    background-color: #fff;
+    color: #1f2937;
+}
+
+.circle-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #f2f2f2;
+    border: none;
+    cursor: pointer;
+  }
+
+  .circle-button .arrow-icon {
+    width: 20px;
+    height: 20px;
+    border: solid #000;
+    border-width: 0 3px 3px 0;
+    transform: rotate(45deg);
+  }
