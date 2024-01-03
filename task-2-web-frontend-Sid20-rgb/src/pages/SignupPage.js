@@ -9,6 +9,7 @@ export default function Signup() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
 
@@ -18,7 +19,7 @@ export default function Signup() {
     // setIsLoading(true);
 
     axios
-      .post("http://localhost:3001/users/register", {
+      .post("http://localhost:3000/users/register", {
         username,
         email,
         password,
@@ -27,6 +28,7 @@ export default function Signup() {
         setUsername("");
         setEmail("");
         setPassword("");
+        setConfirmPassword("");
         setMessage(response.data.message);
         // setIsLoading(false);
         window.location.href = "/login";
@@ -71,6 +73,8 @@ export default function Signup() {
               Travel Far Blog Wide
             </p>
           </div>
+
+          <span className="text-red-500 pb-8 text-sm">{error}</span>
 
           <div className="mb-4">
             <label
@@ -135,8 +139,8 @@ export default function Signup() {
               placeholder="Re-enter your password"
               autoFocus
               required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
             />
           </div>
 

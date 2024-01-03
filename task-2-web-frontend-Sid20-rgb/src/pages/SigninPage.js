@@ -1,13 +1,11 @@
 import axios from "axios";
-import { Link } from "react-router-dom";
 // import Bg from "../assets/images/bg2.jpg";
+import { useState } from "react";
 import Logo from "../assets/images/logo.png";
 import Button from "../components/common/Button";
 import Input from "../components/common/Input";
-import { useState } from "react";
 
 export default function Login() {
-
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -22,17 +20,6 @@ export default function Login() {
 
   const handleSignin = (e) => {
     e.preventDefault();
-
-    // Perform form validation
-    if (username.trim() === "") {
-      setError("Username is required");
-      return;
-    }
-
-    if (password.trim() === "") {
-      setError("Password is required");
-      return;
-    }
 
     // setIsLoading(true); // Set isLoading to true before making the API call
 
@@ -79,6 +66,8 @@ export default function Login() {
             </p>
           </div>
 
+          <span className="text-red-500 pb-8 text-sm font-medium">{error}</span>
+
           <div className="mb-4">
             <label
               className="block text-white text-sm font-bold mb-2"
@@ -86,15 +75,15 @@ export default function Login() {
             >
               Username
             </label>
-            <Input 
+            <Input
               type="text"
               placeholder="Enter your username"
               autoFocus
               required
               onChange={handleUsernameChange}
-              />
+            />
           </div>
-          
+
           <div className="mb-4">
             <label
               className="block text-white text-sm font-bold mb-2"
@@ -102,7 +91,7 @@ export default function Login() {
             >
               Password
             </label>
-            <Input 
+            <Input
               type="password"
               placeholder="Enter your password"
               autoFocus
@@ -112,24 +101,19 @@ export default function Login() {
           </div>
 
           <div className="text-right mt-2">
-              <a href="/" className="text-s font-medium text-[white] texts">
-                Forgot Password?
-              </a>
-            </div>
-          
+            <a href="/" className="text-s font-medium text-[white] texts">
+              Forgot Password?
+            </a>
+          </div>
+
           <div className="flex items-center justify-center mt-auto">
             {/* <Link to='/homepage'> */}
-              <Button text="Log In" 
-              onClick={handleSignin}
-              />
+            <Button text="Log In" onClick={handleSignin} />
             {/* </Link> */}
           </div>
           <div className="mt-4 text-white text-center">
             Don't have an account?{" "}
-            <a
-              className="text-blue-400 underline"
-              href="/homepage"
-            >
+            <a className="text-blue-400 underline" href="/homepage">
               Register
             </a>
           </div>

@@ -5,23 +5,56 @@ const router = express.Router();
 const User = require("../models/User");
 
 const registerUser = async (req, res, next) => {
-  const { username, email, password } = req.body;
+  console.log("Request Body:", req.body);
 
-  User.findOne({ username: username })
-    .then((user) => {
-      if (user) return res.status(400).json({ error: "Duplicate username" });
+  const { username, password, email } = req.body;
 
-      bcrypt.hash(password, 10, (err, hash) => {
-        if (err) return res.status(500).json({ error: err.message });
+  try {
+    // Check for empty fields
+    if (!username || !password || !email) {
+      return res.status(400).json({ error: "Please fill in all fields" });
+    }
 
-        User.create({ username, email, password: hash })
-          .then((user) => {
-            res.status(201).json(user);
-          })
-          .catch(next);
+    if (!email.includes("@") || !email.includes(".")) {
+      return res.status(400).json({ error: "Please enter a valid email" });
+    }
+
+    // Check for password complexity
+    const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+={}[\]:;<>,.?~\\-])/;
+    if (!passwordRegex.test(password)) {
+      return res.status(400).json({
+        error:
+          "Password must include combination of: Uppercase letters, Lowercase letters, Numbers, Special characters (e.g.,!, @, #, $)",
       });
-    })
-    .catch(next);
+    }
+
+    // Check for password length
+    const minLength = 8;
+    if (password.length < minLength) {
+      return res.status(400).json({
+        error: `Password length should be at least ${minLength} characters.`,
+      });
+    }
+
+    const existingUser = await User.findOne({ username: username });
+    if (existingUser) {
+      return res.status(400).json({ error: "Duplicate username" });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const user = await User.create({
+      username,
+      password: hashedPassword,
+      email,
+    });
+
+    res.status(201).json({ status: "success", message: "User created" });
+  } catch (error) {
+    /* istanbul ignore next */
+    next(error);
+  }
 };
 
 const loginUser = async (req, res, next) => {
