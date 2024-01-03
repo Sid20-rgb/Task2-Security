@@ -1,6 +1,8 @@
 import axios from "axios";
 // import Bg from "../assets/images/bg2.jpg";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import zxcvbn from "zxcvbn";
 import Logo from "../assets/images/logo.png";
 import Button from "../components/common/Button";
 import Input from "../components/common/Input";
@@ -12,11 +14,22 @@ export default function Signup() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
+  const [passwordStrength, setPasswordStrength] = useState(0);
+
+  const navigate = useNavigate();
 
   const handleSignup = (e) => {
     e.preventDefault();
 
-    // setIsLoading(true);
+    // Assess password strength
+    const passwordScore = zxcvbn(password);
+    setPasswordStrength(passwordScore.score);
+
+    // // Check if password meets complexity requirements
+    // if (passwordScore.score < 2) {
+    //   setError("Password is too weak. Please choose a stronger password.");
+    //   return;
+    // }
 
     axios
       .post("http://localhost:3000/users/register", {
@@ -30,6 +43,7 @@ export default function Signup() {
         setPassword("");
         setConfirmPassword("");
         setMessage(response.data.message);
+        window.location.href = "/signin";
         // setIsLoading(false);
         window.location.href = "/login";
       })
@@ -45,6 +59,49 @@ export default function Signup() {
         }
         // setIsLoading(false);
       });
+  };
+
+  const getPasswordStrengthLabel = (score) => {
+    switch (score) {
+      case 0:
+        return "Very Weak";
+      case 1:
+        return "Weak";
+      case 2:
+        return "Moderate";
+      case 3:
+        return "Strong";
+      case 4:
+        return "Very Strong";
+      default:
+        return "";
+    }
+  };
+
+  const getPasswordStrengthColor = (score) => {
+    switch (score) {
+      case 0:
+        return "red";
+      case 1:
+        return "orange";
+      case 2:
+        return "yellow";
+      case 3:
+        return "green";
+      case 4:
+        return "dark-green";
+      default:
+        return "";
+    }
+  };
+
+  const handlePasswordChange = (e) => {
+    // Update password state
+    setPassword(e.target.value);
+
+    // Assess password strength on each input change
+    const passwordScore = zxcvbn(e.target.value);
+    setPasswordStrength(passwordScore.score);
   };
 
   return (
@@ -123,8 +180,20 @@ export default function Signup() {
               autoFocus
               required
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={handlePasswordChange}
             />
+            {password.length > 0 && (
+              <div className="text-sm text-white">
+                Password Strength:{" "}
+                <span
+                  className={`text-${getPasswordStrengthColor(
+                    passwordStrength
+                  )}`}
+                >
+                  {getPasswordStrengthLabel(passwordStrength)}
+                </span>
+              </div>
+            )}
           </div>
 
           <div className="mb-4">
@@ -150,6 +219,19 @@ export default function Signup() {
               text="REGISTER"
               // isLoading={isLoading}
               onClick={handleSignup}
+            />
+            {/* </Link> */}
+          </div>
+
+          <div className="flex items-center text-[#ffffff] justify-center mt-5">
+            {/* <Link to='/login'> */}
+            <Button
+              text="Continue as Guest"
+              // isLoading={isLoading}
+              bgColor="172678"
+              hoverBgColor="123456"
+              textColor="000"
+              onClick={() => navigate("/")}
             />
             {/* </Link> */}
           </div>

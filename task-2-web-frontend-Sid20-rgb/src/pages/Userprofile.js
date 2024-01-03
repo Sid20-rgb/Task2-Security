@@ -67,7 +67,7 @@ const UserProfile = ({ showUploads }) => {
         <div className="bg-[#1F2937] flex items-center rounded-tl-3xl justify-end pt-2 lg:bg-[#e5e7eb] pr-4 mb-2">
           <div className="ml-2">
             <h3 className="font-bold text-white lg:text-black">
-              Hi, {user?.data[0].username}
+              Hi, {user ? user?.data[0].username : "Guest User"}
             </h3>
           </div>
           <Link to="/updateProfile">
@@ -143,7 +143,7 @@ const UserProfile = ({ showUploads }) => {
           {userUploadedBlogs.length === 0 && (
             <div className="flex flex-col items-center justify-center h-full">
               <p className="text-white text-lg font-medium">
-                You haven't uploaded any blogs yet
+                {user ? " You haven't uploaded any blogs yet" : "Please login"}
               </p>
             </div>
           )}

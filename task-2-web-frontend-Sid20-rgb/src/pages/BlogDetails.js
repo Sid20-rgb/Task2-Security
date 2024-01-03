@@ -1,6 +1,6 @@
 import axios from "axios";
 import Chart from "chart.js/auto";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { Line } from "react-chartjs-2";
 import {
   FaArrowLeft,
@@ -9,6 +9,7 @@ import {
   FaMapMarkedAlt,
 } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../context/UserContext";
 import GraphDialog from "./GraphDialog";
 
 const chartOptions = {
@@ -61,6 +62,8 @@ const BlogDetails = () => {
   const [chartData, setChartData] = useState(null);
   const chartContainerRef = useRef(null);
   const [isGraphDialogOpen, setIsGraphDialogOpen] = useState(false);
+
+  const { user } = useContext(UserContext);
 
   // Function to handle the graph icon click
   const handleGraphIconClick = () => {
@@ -198,7 +201,7 @@ const BlogDetails = () => {
         window.scrollTo({ top: y, behavior: "smooth" });
       } else {
         alert(`Section is not available in the content.`);
-      } 
+      }
     } else {
       alert(`"${category}" section not found in the content.`);
     }
@@ -235,7 +238,13 @@ const BlogDetails = () => {
         <div className="absolute top-4 right-4 z-20 flex gap-4">
           <FaCommentDots
             className="text-4xl text-white cursor-pointer hover:text-blue-500 transition duration-300"
-            onClick={() => navigate(`/commentpage`)}
+            onClick={() => {
+              if (user) {
+                navigate(`/commentpage`);
+              } else {
+                navigate("/please-signin");
+              }
+            }}
           />
           <FaMapMarkedAlt
             className="text-4xl text-white cursor-pointer hover:text-green-500 transition duration-300"

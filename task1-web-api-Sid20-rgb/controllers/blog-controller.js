@@ -4,33 +4,41 @@ const User = require("../models/User");
 
 const getAllBlogs = async (req, res, next) => {
   try {
-    const loggedInUserId = req.user.id;
-    const userInfo = await User.findById(loggedInUserId);
     const blogs = await Blog.find().populate("comments");
 
-    const otherBlogs = blogs.map((blog) => {
-      const isBookmarked = userInfo.bookmarkedBlogs.includes(
-        blog.id.toString()
-      );
+    if (req.user) {
+      const loggedInUserId = req.user.id;
 
-      const commentsWithOwnership = blog.comments.map((comment) => {
-        const isCommentOwner = comment.user.id.toString() === loggedInUserId;
+      const userInfo = await User.findById(loggedInUserId);
+
+      const otherBlogs = blogs.map((blog) => {
+        const isBookmarked = userInfo.bookmarkedBlogs.includes(
+          blog.id.toString()
+        );
+
+        const commentsWithOwnership = blog.comments.map((comment) => {
+          const isCommentOwner = comment.user.id.toString() === loggedInUserId;
+          return {
+            ...comment.toObject(),
+            isCommentOwner: isCommentOwner,
+          };
+        });
+
         return {
-          ...comment.toObject(),
-          isCommentOwner: isCommentOwner,
+          ...blog.toObject(),
+          comments: commentsWithOwnership, // Replace comments with commentsWithOwnership
+          isBookmarked: isBookmarked,
         };
       });
 
-      return {
-        ...blog.toObject(),
-        comments: commentsWithOwnership, // Replace comments with commentsWithOwnership
-        isBookmarked: isBookmarked,
-      };
-    });
-
-    res.json({
-      data: otherBlogs,
-    });
+      res.json({
+        data: otherBlogs,
+      });
+    } else {
+      res.json({
+        data: blogs,
+      });
+    }
   } catch (error) {
     next(error);
   }

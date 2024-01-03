@@ -29,16 +29,16 @@ router.get(
 );
 
 // Get blogs by user id
-router.get("/user/:user_id", blogController.getBlogsByUserId);
+router.get("/user/:user_id", verifyUser, blogController.getBlogsByUserId);
 
 // Search blogs
 router.get("/search", blogController.searchBlogs);
 
 // Search Users
-router.get("/searchUser", blogController.searchUsers);
+router.get("/searchUser", verifyUser, blogController.searchUsers);
 
 // Get all bookmarked blogs
-router.get("/bookmarked-blogs", blogController.getBookmarkedBlogs);
+router.get("/bookmarked-blogs", verifyUser, blogController.getBookmarkedBlogs);
 
 router
   .route("/:blog_id")

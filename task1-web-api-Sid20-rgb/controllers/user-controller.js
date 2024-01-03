@@ -60,35 +60,89 @@ const registerUser = async (req, res, next) => {
 const loginUser = async (req, res, next) => {
   const { username, password } = req.body;
 
-  User.findOne({ username: username })
-    .then((user) => {
-      if (!user)
-        return res.status(400).json({ error: "User is not registered" });
+  try {
+    const user = await User.findOne({ username: username });
 
-      bcrypt.compare(password, user.password, (err, success) => {
-        if (err) return res.status(500).json({ error: err.message });
-        if (!success)
-          /* istanbul ignore next */
-          return res.status(400).json({ error: "Password does not match" });
+    if (!username || !password) {
+      return res.status(400).json({ error: "Please fill in all fields" });
+    }
+    
+    if (!user) {
+      return res.status(400).json({ error: "User is not registered" });
+    }
 
-        const payload = {
-          id: user._id,
-          username: user.username,
-          email: user.email,
-        };
+  
 
-        jwt.sign(
-          payload,
-          process.env.SECRET,
-          { expiresIn: "30d" },
-          (err, token) => {
-            if (err) return res.status(500).json({ error: err.message });
-            res.json({ status: "success", token: token });
-          }
-        );
-      });
-    })
-    .catch(next);
+    // Check if the account is locked
+    if (user.accountLocked) {
+      // Check if it's time to unlock the account
+      const lockoutDurationMillis = Date.now() - user.lastFailedLoginAttempt;
+      const lockoutDurationMinutes = lockoutDurationMillis / (60 * 1000); // convert to minutes
+
+      if (lockoutDurationMinutes >= 2) {
+        // Unlock the account
+        user.accountLocked = false;
+        user.failedLoginAttempts = 0;
+        await user.save();
+      } else {
+        return res
+          .status(400)
+          .json({ error: "Account is locked. Please try again later." });
+      }
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      // Increment failed login attempts and update last failed login timestamp
+      user.failedLoginAttempts += 1;
+      user.lastFailedLoginAttempt = Date.now();
+
+      // Check if the maximum allowed failed attempts is reached
+      if (user.failedLoginAttempts >= 4) {
+        // Lock the account
+        user.accountLocked = true;
+        await user.save();
+        return res
+          .status(400)
+          .json({ error: "Account is locked. Please try again later." });
+      }
+
+      // Save the updated user data
+      await user.save();
+
+      return res.status(400).json({ error: "Password does not match" });
+    }
+
+    // Reset failed login attempts and last failed login timestamp on successful login
+    user.failedLoginAttempts = 0;
+    user.lastFailedLoginAttempt = null;
+    await user.save();
+
+    // Check if the account is still locked after successful login
+    if (user.accountLocked) {
+      return res
+        .status(400)
+        .json({ error: "Account is locked. Please try again later." });
+    }
+
+    // If everything is fine, generate and send the JWT token
+    const payload = {
+      id: user._id,
+      username: user.username,
+      email: user.email,
+    };
+
+    jwt.sign(payload, process.env.SECRET, { expiresIn: "1d" }, (err, token) => {
+      if (err) {
+        /* istanbul ignore next */
+        return res.status(500).json({ error: err.message });
+      }
+      res.json({ status: "success", token: token });
+    });
+  } catch (error) {
+    /* istanbul ignore next */
+    next(error);
+  }
 };
 
 const getUserProfile = (req, res, next) => {
@@ -143,7 +197,6 @@ const updatePassword = async (req, res, next) => {
     // Find the user by ID
     const user = await User.findById(userId);
     if (!user) {
-      /* istanbul ignore next */
       return res.status(404).json({ error: "User not found" });
     }
 
@@ -167,11 +220,29 @@ const updatePassword = async (req, res, next) => {
       });
     }
 
+    // Check if the user's password needs to be expired
+    const passwordChangeDate = user.passwordChangeDate || user.createdAt;
+    const passwordExpiryDays = 90; // Change password every 90 days
+
+    const lastPasswordChange = new Date(passwordChangeDate);
+    const currentDate = new Date();
+
+    const daysSinceLastChange = Math.floor(
+      (currentDate - lastPasswordChange) / (1000 * 60 * 60 * 24)
+    );
+
+    if (daysSinceLastChange > passwordExpiryDays) {
+      return res.status(400).json({
+        error: `Your password has expired. Please change your password.`,
+      });
+    }
+
     // Hash the new password
     const hashedNewPassword = await bcrypt.hash(newPassword, 10);
 
-    // Update the user's password
+    // Update the user's password and set the new password change date
     user.password = hashedNewPassword;
+    user.passwordChangeDate = currentDate;
 
     // Save the updated user
     await user.save();

@@ -8,6 +8,7 @@ import {
 import { UserContext } from "./context/UserContext";
 import BlogDetails from "./pages/BlogDetails";
 import CommentPage from "./pages/CommentPage";
+import ErrorPage from "./pages/ErrorPage";
 import IndividualPage from "./pages/IndividualPage";
 import MainPage from "./pages/MainPage";
 import SigninPage from "./pages/SigninPage";
@@ -22,7 +23,9 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={user ? <MainPage /> : <SignupPage />} />
+        <Route path="/" element={<MainPage />} />
+        <Route path="/signup" element={<SignupPage />} />
+        <Route path="/please-signin" element={<ErrorPage />} />
         <Route
           path="/login"
           element={user ? <Navigate to="/homepage" /> : <SigninPage />}

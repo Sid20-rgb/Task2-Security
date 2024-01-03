@@ -29,6 +29,19 @@ const userSchema = new mongoose.Schema({
       ref: "Blog",
     },
   ],
+
+  failedLoginAttempts: {
+    type: Number,
+    default: 0,
+  },
+  accountLocked: {
+    type: Boolean,
+    default: false,
+  },
+  lastFailedLoginAttempt: {
+    type: Date,
+    default: null,
+  },
   // uploadedBlogs: [
   //     {
   //         type: mongoose.SchemaTypes.ObjectId,

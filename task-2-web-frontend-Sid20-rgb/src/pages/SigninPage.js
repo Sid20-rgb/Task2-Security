@@ -1,6 +1,7 @@
 import axios from "axios";
 // import Bg from "../assets/images/bg2.jpg";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Logo from "../assets/images/logo.png";
 import Button from "../components/common/Button";
 import Input from "../components/common/Input";
@@ -9,6 +10,8 @@ export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+
+  const navigate = useNavigate();
 
   const handleUsernameChange = (e) => {
     setUsername(e.target.value);
@@ -24,7 +27,7 @@ export default function Login() {
     // setIsLoading(true); // Set isLoading to true before making the API call
 
     axios
-      .post("http://localhost:3001/users/login", { username, password })
+      .post("http://localhost:3000/users/login", { username, password })
       .then((response) => {
         console.log(response);
         localStorage.setItem("token", response.data.token);
@@ -111,9 +114,25 @@ export default function Login() {
             <Button text="Log In" onClick={handleSignin} />
             {/* </Link> */}
           </div>
+
+          <p className="hidden text-[#000]"></p>
+
+          <div className="flex items-center text-[#ffffff] justify-center mt-5">
+            {/* <Link to='/login'> */}
+            <Button
+              text="Continue as Guest"
+              // isLoading={isLoading}
+              bgColor="172678"
+              hoverBgColor="123456"
+              textColor="000"
+              onClick={() => navigate("/")}
+            />
+            {/* </Link> */}
+          </div>
+
           <div className="mt-4 text-white text-center">
             Don't have an account?{" "}
-            <a className="text-blue-400 underline" href="/homepage">
+            <a className="text-blue-400 underline" href="/signup">
               Register
             </a>
           </div>

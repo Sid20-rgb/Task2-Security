@@ -9,14 +9,16 @@ const BlogsList = ({ showUserProfile, userInfo, fetchUserInfo }) => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3001/blogs", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
+      .get("http://localhost:3000/blogs", {
+        // headers: {
+        //   Authorization: `Bearer ${localStorage.getItem("token")}`,
+        // },
       })
       .then((response) => setBlogs(response.data.data))
       .catch((error) => console.log(error));
   }, []);
+
+  console.log(blogs);
 
   // Filter blogs array to show only posts of other people
   const filteredBlogs = blogs.filter(

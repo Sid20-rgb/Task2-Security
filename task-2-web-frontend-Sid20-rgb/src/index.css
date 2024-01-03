@@ -9,6 +9,32 @@
   font-family: 'Quicksand', sans-serif;
 }
 
+.bg-\[E3536D\] {
+  background-color: #E3536D;
+  /* Set your background color */
+}
+
+.hover\:bg-\[123456\]:hover {
+  background-color: #CA315A;
+  /* Set your hover background color */
+}
+
+.bg-\[172678\] {
+  background-color: #ffff;
+  /* Set your background color */
+}
+
+.hover\:bg-\[123456\]:hover {
+  background-color: #949596;
+  /* Set your hover background color */
+}
+
+.text-\[000\] {
+  color: #000;
+  /* Set your text color */
+}
+
+
 @media (min-width: 1024px) {
   .search-bar {
     width: calc(100vw - 37rem);

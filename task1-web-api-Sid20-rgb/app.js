@@ -33,7 +33,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/users", user_routes);
-app.use("/blogs", verifyUser, blog_routes);
+app.use("/blogs", blog_routes);
 app.use("/comments", verifyUser, comment_routes);
 
 // Error handling middleware
