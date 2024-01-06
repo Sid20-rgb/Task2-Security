@@ -56,6 +56,13 @@ const userSchema = new mongoose.Schema({
       required: true,
     },
   ],
+  userType: {
+    type: String,
+    enum: ["admin", "user"],
+    default: "user",
+    required: true,
+  },
+
   // uploadedBlogs: [
   //     {
   //         type: mongoose.SchemaTypes.ObjectId,

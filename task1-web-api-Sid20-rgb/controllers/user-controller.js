@@ -146,7 +146,7 @@ const loginUser = async (req, res, next) => {
         /* istanbul ignore next */
         return res.status(500).json({ error: err.message });
       }
-      res.json({ status: "success", token: token });
+      res.json({ status: "success", token: token, user: user });
     });
   } catch (error) {
     /* istanbul ignore next */
