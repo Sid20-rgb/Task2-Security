@@ -5,7 +5,7 @@ import { UserContext } from "../context/UserContext";
 
 const Explore = ({ showUserProfile, handleTabClick }) => {
   const [users, setUsers] = useState([]);
-  const { currentUser } = useContext(UserContext);
+  const { user } = useContext(UserContext);
 
   const navigate = useNavigate();
 
@@ -26,7 +26,7 @@ const Explore = ({ showUserProfile, handleTabClick }) => {
         showUserProfile ? "hidden lg:grid" : "block"
       } mt-[180px] z-10 grid grid-cols-2 sm:grid-cols-3 gap-4 px-4 xl:grid-cols-4`}
     >
-      {currentUser ? (
+      {user ? (
         users.map((user) => (
           <div
             className="relative rounded-lg shadow-lg mb-4 max-h-[12rem]"

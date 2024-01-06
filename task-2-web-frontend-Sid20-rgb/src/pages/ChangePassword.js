@@ -46,9 +46,7 @@ const ChangePassword = () => {
         setSuccessMessage("");
       }
     } catch (error) {
-      // Handle API errors
-      setError("Failed to update password");
-      setSuccessMessage("");
+      setError(error.response.data.error);
     }
   };
 
@@ -67,7 +65,7 @@ const ChangePassword = () => {
             placeholder="Enter your current password"
             value={currentPassword}
             className="text-black w-full py-3 px-4 rounded-md"
-            style={{ fontSize: '16px' }}
+            style={{ fontSize: "16px" }}
             onChange={(e) => setCurrentPassword(e.target.value)}
           />
         </div>
@@ -80,7 +78,7 @@ const ChangePassword = () => {
             placeholder="Enter your new password"
             value={newPassword}
             className="text-black w-full py-3 px-4 rounded-md"
-            style={{ fontSize: '16px' }}
+            style={{ fontSize: "16px" }}
             onChange={(e) => setNewPassword(e.target.value)}
           />
         </div>
@@ -92,11 +90,11 @@ const ChangePassword = () => {
             placeholder="Confirm your new password"
             value={confirmPassword}
             className="text-black w-full py-3 px-4 rounded-md"
-            style={{ fontSize: '16px' }}
+            style={{ fontSize: "16px" }}
             onChange={(e) => setConfirmPassword(e.target.value)}
           />
         </div>
-        <n/>
+        <n />
         <button
           type="submit"
           className="bg-[#4caf4fd0] py-3 px-4 font-medium rounded-md transition-colors duration-300 hover:bg-[#4caf50]"

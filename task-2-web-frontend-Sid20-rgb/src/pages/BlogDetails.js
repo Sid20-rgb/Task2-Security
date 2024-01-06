@@ -231,7 +231,7 @@ const BlogDetails = () => {
         <FaArrowLeft
           className="absolute z-20 top-4 left-4 text-2xl text-white cursor-pointer"
           onClick={() => {
-            navigate(`/homepage`);
+            navigate(`/`);
           }}
         />
 

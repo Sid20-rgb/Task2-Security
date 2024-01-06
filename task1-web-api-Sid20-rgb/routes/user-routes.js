@@ -6,6 +6,7 @@ const User = require("../models/User");
 const userController = require("../controllers/user-controller");
 const { verifyUser } = require("../middlewares/auth");
 const upload = require("../middlewares/upload");
+const passwordRecoveryController = require("../controllers/passwordrecovery-controller");
 
 //User registration
 router.post("/register", userController.registerUser);
@@ -29,5 +30,15 @@ router.post("/uploadImage", verifyUser, upload, userController.uploadImage);
 
 // Update password
 router.put("/change-password", verifyUser, userController.updatePassword);
+
+// Password recovery routes
+router.post(
+  "/password-recovery/request-password-reset",
+  passwordRecoveryController.requestPasswordReset
+);
+router.post(
+  "/password-recovery/reset-password/:token",
+  passwordRecoveryController.resetPassword
+);
 
 module.exports = router;

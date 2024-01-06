@@ -50,6 +50,12 @@ const registerUser = async (req, res, next) => {
       email,
     });
 
+    // Update password history for the newly registered user
+    user.passwordHistory.push(hashedPassword);
+    // Trim the password history to a specific depth (e.g., last 5 passwords)
+    const passwordHistoryDepth = 5;
+    user.passwordHistory = user.passwordHistory.slice(-passwordHistoryDepth);
+
     res.status(201).json({ status: "success", message: "User created" });
   } catch (error) {
     /* istanbul ignore next */
@@ -66,28 +72,31 @@ const loginUser = async (req, res, next) => {
     if (!username || !password) {
       return res.status(400).json({ error: "Please fill in all fields" });
     }
-    
+
     if (!user) {
       return res.status(400).json({ error: "User is not registered" });
     }
 
-  
-
-    // Check if the account is locked
     if (user.accountLocked) {
       // Check if it's time to unlock the account
       const lockoutDurationMillis = Date.now() - user.lastFailedLoginAttempt;
-      const lockoutDurationMinutes = lockoutDurationMillis / (60 * 1000); // convert to minutes
+      const lockoutDurationSeconds = lockoutDurationMillis / 1000; // convert to seconds
 
-      if (lockoutDurationMinutes >= 2) {
+      if (lockoutDurationSeconds >= 120) {
+        // 2 minutes in seconds
         // Unlock the account
         user.accountLocked = false;
         user.failedLoginAttempts = 0;
         await user.save();
       } else {
-        return res
-          .status(400)
-          .json({ error: "Account is locked. Please try again later." });
+        // Calculate the time remaining for the account lockout period
+        const timeRemainingSeconds = 120 - lockoutDurationSeconds;
+        const minutes = Math.floor(timeRemainingSeconds / 60);
+        const seconds = Math.floor(timeRemainingSeconds % 60);
+
+        return res.status(400).json({
+          error: `Account is locked. Please try again later after ${minutes} minutes and ${seconds} seconds.`,
+        });
       }
     }
 
@@ -203,7 +212,7 @@ const updatePassword = async (req, res, next) => {
     // Compare the current password with the stored hashed password
     const passwordMatch = await bcrypt.compare(currentPassword, user.password);
     if (!passwordMatch) {
-      return res.status(401).json({ error: "Incorrect current password" });
+      return res.status(400).json({ error: "Incorrect current password" });
     }
 
     // Check if the new password and confirm password match
@@ -220,20 +229,16 @@ const updatePassword = async (req, res, next) => {
       });
     }
 
-    // Check if the user's password needs to be expired
-    const passwordChangeDate = user.passwordChangeDate || user.createdAt;
-    const passwordExpiryDays = 90; // Change password every 90 days
-
-    const lastPasswordChange = new Date(passwordChangeDate);
-    const currentDate = new Date();
-
-    const daysSinceLastChange = Math.floor(
-      (currentDate - lastPasswordChange) / (1000 * 60 * 60 * 24)
+    // Check if the new password is in the password history
+    const isPasswordInHistory = await Promise.all(
+      user.passwordHistory.map(async (oldPassword) => {
+        return await bcrypt.compare(newPassword, oldPassword);
+      })
     );
 
-    if (daysSinceLastChange > passwordExpiryDays) {
+    if (isPasswordInHistory.includes(true)) {
       return res.status(400).json({
-        error: `Your password has expired. Please change your password.`,
+        error: "New password cannot be one of the recent passwords",
       });
     }
 
@@ -242,9 +247,17 @@ const updatePassword = async (req, res, next) => {
 
     // Update the user's password and set the new password change date
     user.password = hashedNewPassword;
-    user.passwordChangeDate = currentDate;
+    user.passwordChangeDate = new Date();
 
     // Save the updated user
+    await user.save();
+
+    // Update the password history
+    user.passwordHistory.push(hashedNewPassword);
+    // Trim the password history to a specific depth (e.g., last 5 passwords)
+    const passwordHistoryDepth = 5;
+    user.passwordHistory = user.passwordHistory.slice(-passwordHistoryDepth);
+
     await user.save();
 
     res.status(204).json({ message: "Password updated successfully" });

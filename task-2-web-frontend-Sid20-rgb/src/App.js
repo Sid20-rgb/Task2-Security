@@ -16,6 +16,8 @@ import SignupPage from "./pages/SignupPage";
 import UpdateBlogPage from "./pages/UpdateBlogPage";
 import UpdateProfile from "./pages/UpdateProfile";
 import UploadPage from "./pages/UploadPage";
+import ForgetPasswordPage from "./pages/ForgetPassword";
+
 
 function App() {
   const { user, setUser } = useContext(UserContext);
@@ -24,16 +26,16 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<MainPage />} />
-        <Route path="/signup" element={<SignupPage />} />
-        <Route path="/please-signin" element={<ErrorPage />} />
         <Route
           path="/login"
-          element={user ? <Navigate to="/homepage" /> : <SigninPage />}
+          element={user ? <Navigate to="/" /> : <SigninPage />}
         />
-        <Route
+        <Route path="/signup" element={<SignupPage />} />
+        <Route path="/please-signin" element={<ErrorPage />} />
+        {/* <Route
           path="/homepage"
           element={user ? <MainPage /> : <Navigate to="/" />}
-        />
+        /> */}
         <Route path="/uploadpage" element={<UploadPage />} />
         <Route path="/update/:blogId" element={<UpdateBlogPage />} />
         <Route
@@ -46,6 +48,7 @@ function App() {
         />
         <Route path="/commentpage" element={<CommentPage />} />
         <Route path="/blogDetails" element={<BlogDetails />} />
+        <Route path="/forgotPassword" element={<ForgetPasswordPage />} />
       </Routes>
     </Router>
   );

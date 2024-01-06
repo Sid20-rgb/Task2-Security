@@ -5,15 +5,17 @@ import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 
 const UserProfile = ({ showUploads }) => {
-  const { user, setUser } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const [blogs, setBlogs] = useState([]);
   const [profilePicture, setProfilePicture] = useState(null);
 
   const navigate = useNavigate();
 
+  console.log(user);
+
   useEffect(() => {
     axios
-      .get(`http://localhost:3001/blogs/`, {
+      .get(`http://localhost:3000/blogs/`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -75,7 +77,7 @@ const UserProfile = ({ showUploads }) => {
               src={
                 user?.data[0].image == null
                   ? "https://marketplace.canva.com/EAFEits4-uw/1/0/1600w/canva-boy-cartoon-gamer-animated-twitch-profile-photo-oEqs2yqaL8s.jpg"
-                  : `http://localhost:3001/uploads/${user?.data[0].image}`
+                  : `http://localhost:3000/uploads/${user?.data[0].image}`
               }
               alt="Profile"
               className="w-12 h-12 rounded-full cursor-pointer ml-2"
@@ -97,7 +99,7 @@ const UserProfile = ({ showUploads }) => {
               src={
                 user?.data[0].image == null
                   ? "https://marketplace.canva.com/EAFEits4-uw/1/0/1600w/canva-boy-cartoon-gamer-animated-twitch-profile-photo-oEqs2yqaL8s.jpg"
-                  : `http://localhost:3001/uploads/${user?.data[0].image}`
+                  : `http://localhost:3000/uploads/${user?.data[0].image}`
               }
               alt="Profile"
               className="w-28 h-28 rounded-full cursor-pointer mb-2"

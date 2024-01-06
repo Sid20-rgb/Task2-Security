@@ -32,7 +32,7 @@ export default function Signup() {
     // }
 
     axios
-      .post("http://localhost:3000/users/register", {
+      .post("http://localhost:3001/users/register", {
         username,
         email,
         password,

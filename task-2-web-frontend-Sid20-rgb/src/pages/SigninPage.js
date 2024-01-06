@@ -27,21 +27,22 @@ export default function Login() {
     // setIsLoading(true); // Set isLoading to true before making the API call
 
     axios
-      .post("http://localhost:3000/users/login", { username, password })
+      .post("http://localhost:3001/users/login", { username, password })
       .then((response) => {
         console.log(response);
         localStorage.setItem("token", response.data.token);
         // Assuming the user data is returned in the response
-        const user = response.data.user;
+        // const user = response.data.user;
         // setUser(user);
         // setIsLoading(false); // Set isLoading to false after the API call is completed
-        window.location.href = "/homepage";
+        window.location.href = "/";
       })
       .catch((err) => {
         setError(err.response.data.error);
         // setIsLoading(false); // Set isLoading to false after the API call is completed
       });
   };
+
   return (
     <section className="min-h-screen flex flex-col md:flex-row bg-[#047683]">
       <div
@@ -104,7 +105,7 @@ export default function Login() {
           </div>
 
           <div className="text-right mt-2">
-            <a href="/" className="text-s font-medium text-[white] texts">
+            <a href="/forgotPassword" className="text-s font-medium text-[white] texts">
               Forgot Password?
             </a>
           </div>
