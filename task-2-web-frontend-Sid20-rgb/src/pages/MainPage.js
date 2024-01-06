@@ -1,14 +1,14 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import BlogsList from "../components/BlogsList";
 import Explore from "../components/Explore";
 import FavoriteBlogs from "../components/Favorite";
 import IndividualUserPosts from "../components/IndividualUserPosts";
 import SearchResults from "../components/SearchResults";
 import NavigationBar from "../components/common/navigation";
+import { UserContext } from "../context/UserContext";
 import UserProfile from "./Userprofile";
 import "./style.css"; // Import the style.css file
-
 
 const MainPage = () => {
   const [activeTab, setActiveTab] = useState("blogs");
@@ -18,6 +18,9 @@ const MainPage = () => {
   const [userInfo, setUserInfo] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  const { user } = useContext(UserContext);
+
+  console.log(user);
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
@@ -121,6 +124,13 @@ const MainPage = () => {
           userInfo={userInfo}
           fetchUserInfo={fetchUserInfo}
         />
+      ),
+    },
+    dashboard: {
+      body: (
+        <div>
+          <h1>Dashboard</h1>
+        </div>
       ),
     },
   };

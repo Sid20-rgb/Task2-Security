@@ -11,7 +11,7 @@ const UserProfile = ({ showUploads }) => {
 
   const navigate = useNavigate();
 
-  console.log(user);
+  console.log(user?.data[0].userType);
 
   useEffect(() => {
     axios
@@ -69,7 +69,8 @@ const UserProfile = ({ showUploads }) => {
         <div className="bg-[#1F2937] flex items-center rounded-tl-3xl justify-end pt-2 lg:bg-[#e5e7eb] pr-4 mb-2">
           <div className="ml-2">
             <h3 className="font-bold text-white lg:text-black">
-              Hi, {user ? user?.data[0].username : "Guest User"}
+              Hi, {user ? user?.data[0].username : "Guest User"}{" "}
+              {user?.data[0].userType === "admin" && <span>(Admin)</span>}
             </h3>
           </div>
           <Link to="/updateProfile">

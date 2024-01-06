@@ -1,5 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { FaCompass, FaHome, FaPlus, FaStar, FaUser } from "react-icons/fa";
+import React, { useContext, useEffect, useState } from "react";
+import {
+  FaCompass,
+  FaDashcube,
+  FaHome,
+  FaPlus,
+  FaStar,
+  FaUser,
+} from "react-icons/fa";
+import { UserContext } from "../../context/UserContext";
 
 export default function NavigationBar({
   showUserProfile,
@@ -7,6 +15,7 @@ export default function NavigationBar({
   handleTabClick,
 }) {
   const [isSmallScreen, setIsSmallScreen] = useState(false);
+  const { user } = useContext(UserContext);
 
   useEffect(() => {
     const handleResize = () => {
@@ -29,6 +38,19 @@ export default function NavigationBar({
       }`}
     >
       <nav className="flex justify-between lg:flex-col">
+        {user?.data[0].userType == "admin" && (
+          <a
+            className="p-4 flex items-center lg:flex-col"
+            onClick={() => {
+              handleTabClick("dashboard");
+              setShowUserProfile(false);
+            }}
+          >
+            <FaDashcube className="mr-2 w-5 h-5 transition-transform hover:scale-110 hover:text-[#047683]" />
+            <p className="hidden lg:block text-center">Dashboard</p>
+          </a>
+        )}
+
         <a
           href="#"
           className="p-4 flex items-center lg:flex-col"
@@ -40,6 +62,7 @@ export default function NavigationBar({
           <FaHome className="mr-2 w-5 h-5 transition-transform hover:scale-110 hover:text-[#047683]" />
           <p className="hidden lg:block text-center">Home</p>
         </a>
+
         <a
           className="p-4 flex items-center lg:flex-col"
           onClick={() => {
@@ -50,29 +73,27 @@ export default function NavigationBar({
           <FaCompass className="mr-2 w-5 h-5 transition-transform hover:scale-110 hover:text-[#047683]" />
           <p className="hidden lg:block text-center">Explorer</p>
         </a>
-        <a
-          className="p-4 flex items-center lg:flex-col"
-          onClick={() => {
-            handleTabClick("favoriteblogs");
-            setShowUserProfile(false);
-          }}
-        >
-          <FaStar className="mr-2 w-5 h-5 transition-transform hover:scale-110 hover:text-[#047683]" />
-          <p className="hidden lg:block text-center">Favorite Blogs</p>
-        </a>
 
-        {/* <a
-          href="#"
-          className="p-4 flex items-center lg:flex-col"
-          onClick={() => console.log("Favorite Blogs clicked")}
-        >
-          <FaStar className="mr-2 w-5 h-5 transition-transform hover:scale-110 hover:text-[#047683]" />
-          <p className="hidden lg:block text-center">Favorite Blogs</p>
-        </a> */}
-        <a href="/uploadpage" className="p-4 flex items-center lg:flex-col">
-          <FaPlus className="mr-2 w-5 h-5 transition-transform hover:scale-110 hover:text-[#047683]" />
-          <p className="hidden lg:block text-center">Create Blog</p>
-        </a>
+        {user?.data[0].userType !== "admin" && (
+          <>
+            <a
+              className="p-4 flex items-center lg:flex-col"
+              onClick={() => {
+                handleTabClick("favoriteblogs");
+                setShowUserProfile(false);
+              }}
+            >
+              <FaStar className="mr-2 w-5 h-5 transition-transform hover:scale-110 hover:text-[#047683]" />
+              <p className="hidden lg:block text-center">Favorite Blogs</p>
+            </a>
+
+            <a href="/uploadpage" className="p-4 flex items-center lg:flex-col">
+              <FaPlus className="mr-2 w-5 h-5 transition-transform hover:scale-110 hover:text-[#047683]" />
+              <p className="hidden lg:block text-center">Create Blog</p>
+            </a>
+          </>
+        )}
+
         <a
           href="#"
           className="p-4 flex items-center lg:hidden lg:flex-col"
