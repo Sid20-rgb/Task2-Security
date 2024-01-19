@@ -6,6 +6,7 @@ const user_routes = require("./routes/user-routes");
 const blog_routes = require("./routes/blog-routes");
 const comment_routes = require("./routes/comment-routes");
 const { verifyUser } = require("./middlewares/auth");
+const adminRoutes = require("./routes/admin-route")
 
 // const port = process.env.PORT
 
@@ -35,7 +36,7 @@ app.get("/", (req, res) => {
 app.use("/users", user_routes);
 app.use("/blogs", blog_routes);
 app.use("/comments", verifyUser, comment_routes);
-
+app.use("/admin", verifyUser, adminRoutes)
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err);

@@ -1,9 +1,11 @@
 import axios from "axios";
-import React, { useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { FaUpload } from "react-icons/fa";
 import Button from "../components/common/Button";
 import Input from "../components/common/Input";
+import { UserContext } from "../context/UserContext";
 import "./style.css";
+import { useNavigate } from "react-router-dom";
 
 function UploadPage() {
   const [blogCover, setBlogCover] = useState(null);
@@ -12,6 +14,8 @@ function UploadPage() {
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const fileInputRef = useRef(null);
+  const { user } = useContext(UserContext);
+  const navigate = useNavigate()
 
   const handleblogCoverChange = (event) => {
     const selectedblogCover = event.target.files[0];
@@ -94,67 +98,89 @@ function UploadPage() {
   };
 
   return (
-    <div className="flex justify-center">
-      <div className="w-full max-w-[50rem] py-8 px-12 flex flex-col items-center gap-4 item">
-        <h1 className="text-white text-xl font-semibold">Blog Form</h1>
+    <>
+      {user ? (
+        <div className="flex justify-center">
+          <div className="w-full max-w-[50rem] py-8 px-12 flex flex-col items-center gap-4 item">
+            <h1 className="text-white text-xl font-semibold">Blog Form</h1>
 
-        {/* Show success message */}
-        {successMessage && (
-          <div className="text-green-600">{successMessage}</div>
-        )}
+            {/* Show success message */}
+            {successMessage && (
+              <div className="text-green-600">{successMessage}</div>
+            )}
 
-        {/* Show error message */}
-        {errorMessage && <div className="text-red-600">{errorMessage}</div>}
+            {/* Show error message */}
+            {errorMessage && <div className="text-red-600">{errorMessage}</div>}
 
+            <div
+              className="cursor-pointer w-56 h-44 border text-white border-white rounded-lg flex flex-col gap-2 items-center justify-center px-4"
+              onClick={handleUploadClick}
+            >
+              {!blogCover ? (
+                <>
+                  <FaUpload className="upload-icon w-10 h-10" />
+                  <p className="text-sm">Select the cover image</p>
+                </>
+              ) : (
+                <>
+                  <span>{blogCover.name}</span>
+                  <p className="text-sm">Selected</p>
+                </>
+              )}
+              <input
+                type="file"
+                id="blogCover"
+                accept="image/*"
+                onChange={handleblogCoverChange}
+                ref={fileInputRef}
+                style={{ display: "none" }}
+              />
+            </div>
+
+            <div className="w-full">
+              <Input
+                type="text"
+                placeholder="Type title in here"
+                autoFocus
+                required
+                onChange={handleTitleChange}
+              />
+            </div>
+
+            <div className="w-full">
+              <textarea
+                id="content"
+                rows="5"
+                placeholder="Write a blog in here..."
+                value={content}
+                onChange={handleContentChange}
+                onKeyDown={handleContentKeyDown}
+              />
+            </div>
+
+            <Button text="Upload Blog" onClick={handleAddBlog} />
+          </div>
+        </div>
+      ) : (
         <div
-          className="cursor-pointer w-56 h-44 border text-white border-white rounded-lg flex flex-col gap-2 items-center justify-center px-4"
-          onClick={handleUploadClick}
+          className="flex min-w-[calc(100vw_-_50px)] md:min-w-[calc(100vw_-_560px)]
+        items-center justify-center h-screen bg-gray-800 text-white"
         >
-          {!blogCover ? (
-            <>
-              <FaUpload className="upload-icon w-10 h-10" />
-              <p className="text-sm">Select the cover image</p>
-            </>
-          ) : (
-            <>
-              <span>{blogCover.name}</span>
-              <p className="text-sm">Selected</p>
-            </>
-          )}
-          <input
-            type="file"
-            id="blogCover"
-            accept="image/*"
-            onChange={handleblogCoverChange}
-            ref={fileInputRef}
-            style={{ display: "none" }}
-          />
+          <div className="text-center">
+            <h1 className="text-5xl font-bold mb-4">404 Error Page</h1>
+            <p className="text-lg mb-8">
+              Oops! The page you're looking for doesn't exist.
+            </p>
+            <button
+              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
+              onClick={() => navigate("/login")}
+            >
+              Login
+            </button>
+          </div>
         </div>
-
-        <div className="w-full">
-          <Input
-            type="text"
-            placeholder="Type title in here"
-            autoFocus
-            required
-            onChange={handleTitleChange}
-          />
-        </div>
-
-        <div className="w-full">
-          <textarea
-            id="content"
-            rows="5"
-            placeholder="Write a blog in here..."
-            value={content}
-            onChange={handleContentChange}
-            onKeyDown={handleContentKeyDown}
-          />
-        </div>
-
-        <Button text="Upload Blog" onClick={handleAddBlog} />
-      </div>
-    </div>
+      )}
+    </>
   );
 }
 

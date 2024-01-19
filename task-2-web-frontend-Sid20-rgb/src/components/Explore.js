@@ -54,18 +54,23 @@ const Explore = ({ showUserProfile, handleTabClick }) => {
           </div>
         ))
       ) : (
-        <div className="flex items-center justify-center h-screen bg-gray-800 text-white">
-      <div className="text-center">
-        <h1 className="text-5xl font-bold mb-4">404 Error Page</h1>
-        <p className="text-lg mb-8">Oops! The page you're looking for doesn't exist.</p>
-        <button
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
-          onClick={() => navigate("/login")}
+        <div
+          className="flex min-w-[calc(100vw_-_50px)] md:min-w-[calc(100vw_-_560px)]
+        items-center justify-center h-screen bg-gray-800 text-white"
         >
-          Login
-        </button>
-      </div>
-    </div>
+          <div className="text-center">
+            <h1 className="text-5xl font-bold mb-4">Opps!!</h1>
+            <p className="text-lg mb-8">
+              It looks like you need to login to view this page.
+            </p>
+            <button
+              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
+              onClick={() => navigate("/login")}
+            >
+              Login
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );

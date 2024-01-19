@@ -1,13 +1,13 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { FaArrowLeft, FaRegComment, FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../context/UserContext";
 import "./cmmtstyle.css";
 
 const CommentPage = ({ comments, onDeleteComment, setComments, blog }) => {
   const [commentOwners, setCommentOwners] = useState({});
-
-  console.log(blog);
+  const { user } = useContext(UserContext);
 
   // Function that fetches comment owner's data
   // This function is called inside useEffect hook
@@ -23,7 +23,6 @@ const CommentPage = ({ comments, onDeleteComment, setComments, blog }) => {
       );
 
       if (response.status === 200) {
-        console.log("Comment owner data retrieved successfully");
         return response.data;
       } else {
         console.log("Failed to retrieve comment owner data");
@@ -114,6 +113,13 @@ const CommentPage = ({ comments, onDeleteComment, setComments, blog }) => {
               onClick={() => handleDeleteComment(comment._id)}
             />
           )}
+
+          {user?.data[0]?.userType === "admin" && (
+            <FaTrash
+              className="cursor-pointer text-xl"
+              onClick={() => handleDeleteComment(comment._id)}
+            />
+          )}
         </div>
       ))}
     </div>
@@ -125,6 +131,7 @@ const CommentApp = () => {
   console.log(blog);
   const [comments, setComments] = useState(blog.comments);
   const [newComment, setNewComment] = useState("");
+  const { user } = useContext(UserContext);
 
   const navigate = useNavigate();
 
@@ -208,23 +215,25 @@ const CommentApp = () => {
           blog={blog}
         />
 
-        <div className="flex items-center justify-center mx-5 bg-white pr-2">
-          <input
-            type="text"
-            placeholder="Say something..."
-            autoFocus
-            required
-            value={newComment}
-            className="px-4 py-2 w-full border-none outline-none"
-            onChange={(e) => setNewComment(e.target.value)}
-            onKeyPress={handleKeyPress}
-          />
+        {user?.data[0]?.userType !== "admin" && (
+          <div className="flex items-center justify-center mx-5 bg-white pr-2">
+            <input
+              type="text"
+              placeholder="Say something..."
+              autoFocus
+              required
+              value={newComment}
+              className="px-4 py-2 w-full border-none outline-none"
+              onChange={(e) => setNewComment(e.target.value)}
+              onKeyPress={handleKeyPress}
+            />
 
-          <FaRegComment
-            className="cursor-pointer text-2xl text-black"
-            onClick={handleAddComment}
-          />
-        </div>
+            <FaRegComment
+              className="cursor-pointer text-2xl text-black"
+              onClick={handleAddComment}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

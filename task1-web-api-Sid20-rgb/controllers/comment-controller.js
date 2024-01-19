@@ -1,5 +1,6 @@
 const Comment = require("../models/comment");
 const Blog = require("../models/Blog");
+const User = require("../models/User");
 
 const createComment = async (req, res) => {
   try {
@@ -37,6 +38,9 @@ const deleteComment = async (req, res) => {
     const { id } = req.params;
     const userId = req.user.id;
 
+    const user = await User.findById(userId);
+    const userType = user.userType; // Assuming userType is a property in your user object
+
     // Find the comment by ID
     const comment = await Comment.findById(id);
     // Check if the comment exists
@@ -44,8 +48,8 @@ const deleteComment = async (req, res) => {
       return res.status(404).json({ error: "Comment not found" });
     }
 
-    // Check if the authenticated user is the owner of the comment
-    if (comment.user.id.toString() !== userId) {
+    // Check if the authenticated user is the owner of the comment or an admin
+    if (comment.user.id.toString() !== userId && userType !== "admin") {
       return res
         .status(401)
         .json({ error: "You are not authorized to delete this comment" });

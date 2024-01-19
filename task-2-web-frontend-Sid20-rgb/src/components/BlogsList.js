@@ -23,8 +23,6 @@ const BlogsList = ({ showUserProfile, userInfo, fetchUserInfo }) => {
     (blog) => blog.user.id !== user?.data[0].id
   );
 
-  console.log(showUserProfile);
-
   return (
     <div
       className={`${
@@ -34,7 +32,7 @@ const BlogsList = ({ showUserProfile, userInfo, fetchUserInfo }) => {
       {filteredBlogs.length === 0 ? (
         <div>
           <p className="font-medium">
-            No <span className="text-purple-lighter">books</span> available. 😟
+            No <span className="text-purple-lighter">blogs</span> available. 😟
           </p>
         </div>
       ) : (

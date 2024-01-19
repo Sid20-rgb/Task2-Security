@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
+import AdminDashboard from "../components/AdminDashboard";
 import BlogsList from "../components/BlogsList";
 import Explore from "../components/Explore";
 import FavoriteBlogs from "../components/Favorite";
@@ -127,13 +128,15 @@ const MainPage = () => {
       ),
     },
     dashboard: {
-      body: (
-        <div>
-          <h1>Dashboard</h1>
-        </div>
-      ),
+      body: <AdminDashboard></AdminDashboard>,
     },
   };
+
+  useEffect(() => {
+    if (user?.data[0]?.userType === "admin") {
+      setActiveTab("dashboard");
+    }
+  }, [user]);
 
   const { body } = tabConfig[activeTab];
 

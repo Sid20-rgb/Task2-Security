@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
+import { FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 
@@ -132,39 +133,73 @@ const Blog = ({ blog, userInfo, fetchUserInfo }) => {
       </div>
 
       {/* Bookmark Icon */}
-      <button
-        onClick={handleBookmarkClick}
-        className={`absolute top-4 right-4 w-8 h-8 rounded-full ${
-          isBookmarked ? "bg-blue-500" : "bg-gray-300"
-        }`}
-      >
-        {/* Your bookmark icon SVG */}
-        {isBookmarked ? (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="white"
-            width="24"
-            height="24"
-          >
-            {/* Your bookmark icon SVG path */}
-            <path d="M0 0h24v24H0z" fill="none" />
-            <path d="M19 20.85L12 17.66l-7 3.2V4h14z" />
-          </svg>
-        ) : (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="black"
-            width="24"
-            height="24"
-          >
-            {/* Your non-bookmarked icon SVG path */}
-            <path d="M0 0h24v24H0z" fill="none" />
-            <path d="M17 2H7c-1.1 0-2 .9-2 2v16l7-3 7 3V4c0-1.1-.9-2-2-2zm0 16l-5-2.18L7 18V4h10v14z" />
-          </svg>
-        )}
-      </button>
+      {currentUser?.data[0]?.userType !== "admin" && (
+        <button
+          onClick={handleBookmarkClick}
+          className={`absolute top-4 right-4 w-8 h-8 rounded-full ${
+            isBookmarked ? "bg-blue-500" : "bg-gray-300"
+          }`}
+        >
+          {/* Your bookmark icon SVG */}
+          {isBookmarked ? (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="white"
+              width="24"
+              height="24"
+            >
+              {/* Your bookmark icon SVG path */}
+              <path d="M0 0h24v24H0z" fill="none" />
+              <path d="M19 20.85L12 17.66l-7 3.2V4h14z" />
+            </svg>
+          ) : (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="black"
+              width="24"
+              height="24"
+            >
+              {/* Your non-bookmarked icon SVG path */}
+              <path d="M0 0h24v24H0z" fill="none" />
+              <path d="M17 2H7c-1.1 0-2 .9-2 2v16l7-3 7 3V4c0-1.1-.9-2-2-2zm0 16l-5-2.18L7 18V4h10v14z" />
+            </svg>
+          )}
+        </button>
+      )}
+
+      {currentUser?.data[0]?.userType === "admin" && (
+        <button
+          className="absolute top-4 right-4 w-8 h-8 rounded-full bg-blue-500 flex justify-center items-center"
+          onClick={async (e) => {
+            e.stopPropagation();
+
+            try {
+              console.log(blog._id);
+              const response = await axios.delete(
+                `http://localhost:3001/blogs/${blog._id}`,
+                {
+                  headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                  },
+                }
+              );
+
+              if (response.status === 200) {
+                console.log("Blog deleted successfully");
+                // window.location.reload();
+              } else {
+                console.log("Failed to delete blog");
+              }
+            } catch (error) {
+              console.log("Failed to delete blog", error);
+            }
+          }}
+        >
+          <FaTrash className="text-white" />
+        </button>
+      )}
     </div>
   );
 };

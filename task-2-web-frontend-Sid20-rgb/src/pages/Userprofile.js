@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 
 const UserProfile = ({ showUploads }) => {
-  const { user } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
   const [blogs, setBlogs] = useState([]);
   const [profilePicture, setProfilePicture] = useState(null);
 

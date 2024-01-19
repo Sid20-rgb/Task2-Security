@@ -1,36 +1,39 @@
 .error-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    background-color: #333; /* Choose your preferred background color */
-    color: #fff; /* Choose your preferred text color */
-    text-align: center;
-  }
-  
-  .error-heading {
-    font-size: 3rem;
-    margin-bottom: 10px;
-  }
-  
-  .error-message {
-    font-size: 1.5rem;
-    margin-bottom: 20px;
-  }
-  
-  .error-button {
-    padding: 10px 20px;
-    font-size: 1rem;
-    background-color: #007bff; /* Choose your preferred button color */
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .error-button:hover {
-    background-color: #0056b3; /* Choose your preferred button hover color */
-  }
-  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #333;
+  /* Choose your preferred background color */
+  color: #fff;
+  /* Choose your preferred text color */
+  text-align: center;
+}
+
+.error-heading {
+  font-size: 3rem;
+  margin-bottom: 10px;
+}
+
+.error-message {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+
+.error-button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  background-color: #007bff;
+  /* Choose your preferred button color */
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.error-button:hover {
+  background-color: #0056b3;
+  /* Choose your preferred button hover color */
+}
